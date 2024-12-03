@@ -10,10 +10,9 @@ class Day03 {
     }
 
     fun part2() : Int {
-        return computeRange().sumOf {
-            val enabledPart = input.substring(it.first, it.last)
-            sumOfMul(enabledPart)
-        }
+        return enabledRanges()
+            .map{ input.substring(it.first, it.last) }
+            .sumOf { sumOfMul(it) }
     }
 
     private fun sumOfMul(input: String): Int {
@@ -21,7 +20,7 @@ class Day03 {
         return all.sumOf { it.groupValues[2].toInt() * it.groupValues[3].toInt() }
     }
 
-    private fun computeRange() : List<IntRange> {
+    private fun enabledRanges() : List<IntRange> {
         val result = mutableListOf<IntRange>()
         val dontRangeStart = dontRegex.findAll(input).map { it.range.first }
         val doRangeStart = doRegex.findAll(input).map { it.range.first }
