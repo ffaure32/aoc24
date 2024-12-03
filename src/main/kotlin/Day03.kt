@@ -3,16 +3,16 @@ val doRegex = """(do\(\))""".toRegex()
 val dontRegex = """(don't\(\))""".toRegex()
 
 class Day03 {
-    private val input = readInput(3)
-    private val joinedInput = input.joinToString("")
+    private val input = readInput(3).joinToString("")
+
     fun part1() : Int {
-        return input.sumOf { sumOfMul(it) }
+        return sumOfMul(input)
     }
 
     fun part2() : Int {
         return computeRange().sumOf {
-            val toAnalyse = joinedInput.substring(it.first, it.last)
-            sumOfMul(toAnalyse)
+            val enabledPart = input.substring(it.first, it.last)
+            sumOfMul(enabledPart)
         }
     }
 
@@ -23,14 +23,14 @@ class Day03 {
 
     private fun computeRange() : List<IntRange> {
         val result = mutableListOf<IntRange>()
-        val dontRangeStart = dontRegex.findAll(joinedInput).map { it.range.first }
-        val doRangeStart = doRegex.findAll(joinedInput).map { it.range.first }
+        val dontRangeStart = dontRegex.findAll(input).map { it.range.first }
+        val doRangeStart = doRegex.findAll(input).map { it.range.first }
         var currentDontIndex = dontRangeStart.first()
         result.add(IntRange(0, currentDontIndex))
-        while (currentDontIndex < joinedInput.length) {
-            val start = doRangeStart.firstOrNull { it > currentDontIndex } ?: joinedInput.length
-            currentDontIndex = dontRangeStart.firstOrNull { it > start } ?: joinedInput.length
-            if (start < joinedInput.length)
+        while (currentDontIndex < input.length) {
+            val start = doRangeStart.firstOrNull { it > currentDontIndex } ?: input.length
+            currentDontIndex = dontRangeStart.firstOrNull { it > start } ?: input.length
+            if (start < input.length)
                 result.add(IntRange(start + 1, currentDontIndex))
         }
         return result
