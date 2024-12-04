@@ -2,6 +2,9 @@ data class Coords2D(val x: Int, val y: Int) {
     fun valid(maxX : Int, maxY : Int, minX :Int = 0, minY : Int = 0) : Boolean {
         return x >= minX && x <= maxX && y>= minY && y <= maxY
     }
+    fun inMatrix(max : Int) : Boolean {
+        return valid(max, max)
+    }
 }
 
 enum class Directions {

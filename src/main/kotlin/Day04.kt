@@ -27,8 +27,8 @@ class Xmas(private val x : Coords2D, private val gridSize : Int) {
             var currentPos = x
             val validLetters = mas.filter { l ->
                 currentPos = d.next(currentPos)
-                (valid(currentPos)
-                    && input[currentPos.y][currentPos.x] == l)
+                (currentPos.inMatrix(gridSize - 1)
+                        && input[currentPos.y][currentPos.x] == l)
             }
             validLetters.size == mas.size
         }
@@ -43,11 +43,7 @@ class Xmas(private val x : Coords2D, private val gridSize : Int) {
     }
 
     private fun isMS(diag: Set<Directions>, input: List<String>, ms: Set<Char>)
-            = diag.map { d -> d.next(x) }.filter { valid(it) }.map { input[it.y][it.x] }.toSet() == ms
-
-    fun valid(coords : Coords2D) : Boolean {
-        return coords.valid(gridSize-1, gridSize-1)
-    }
+            = diag.map { d -> d.next(x) }.filter { it.inMatrix(gridSize - 1) }.map { input[it.y][it.x] }.toSet() == ms
 
 
 }
