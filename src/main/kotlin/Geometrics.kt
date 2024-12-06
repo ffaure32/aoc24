@@ -17,6 +17,12 @@ enum class Directions {
         override fun next(actual: Coords2D): Coords2D {
             return Coords2D(actual.x, actual.y-1)
         }
+        override fun move(actual: Coords2D): Coords2D {
+            return Coords2D(actual.x, actual.y-1)
+        }
+        override fun turnRight(): Directions {
+            return RIGHT
+        }
     },
     TOP_RIGHT {
         override fun next(actual: Coords2D): Coords2D {
@@ -26,6 +32,12 @@ enum class Directions {
     RIGHT {
         override fun next(actual: Coords2D): Coords2D {
             return Coords2D(actual.x+1, actual.y)
+        }
+        override fun move(actual: Coords2D): Coords2D {
+            return Coords2D(actual.x+1, actual.y)
+        }
+        override fun turnRight(): Directions {
+            return DOWN
         }
     },
     DOWN_RIGHT {
@@ -37,6 +49,12 @@ enum class Directions {
         override fun next(actual: Coords2D): Coords2D {
             return Coords2D(actual.x, actual.y+1)
         }
+        override fun move(actual: Coords2D): Coords2D {
+            return Coords2D(actual.x, actual.y+1)
+        }
+        override fun turnRight(): Directions {
+            return LEFT
+        }
     },
     DOWN_LEFT {
         override fun next(actual: Coords2D): Coords2D {
@@ -47,7 +65,20 @@ enum class Directions {
         override fun next(actual: Coords2D): Coords2D {
             return Coords2D(actual.x-1, actual.y)
         }
+        override fun move(actual: Coords2D): Coords2D {
+            return Coords2D(actual.x-1, actual.y)
+        }
+        override fun turnRight(): Directions {
+            return TOP
+        }
     };
     abstract fun next(actual : Coords2D) : Coords2D
 
+    open fun move(actual : Coords2D) : Coords2D {
+        return actual
+    }
+
+    open fun turnRight() : Directions {
+        return this
+    }
 }
