@@ -6,6 +6,9 @@ data class Coords2D(val x: Int, val y: Int) {
         return valid(max, max)
     }
 }
+operator fun Coords2D.plus(other: Coords2D) = Coords2D(x + other.x, y + other.y)
+operator fun Coords2D.minus(other: Coords2D) = Coords2D(x - other.x, y - other.y)
+operator fun Coords2D.times(other: Coords2D) = Coords2D(x * other.x, y * other.y)
 
 enum class Directions {
     TOP_LEFT {
