@@ -15,45 +15,42 @@ class Day10 {
         val trailheads = input.flatMapIndexed { y, line ->
             line.mapIndexed { x, _ -> Coords2D(x, y) }
                 .filter { input[it.y][it.x] == '0' }
-        }.toSet()
+        }
         return TopographicMap(trailheads, input.size-1)
     }
 }
 
-class TopographicMap(trailheads: Set<Coords2D>, val maxCoord: Int) {
-    private val finishedTrails = mutableSetOf<Trail>()
+class TopographicMap(trailheads: List<Coords2D>, val maxCoord: Int) {
+    private val finishedTrails = mutableListOf<Trail>()
     init {
         findPath(trailheads)
     }
 
     fun trailheadsScores(): Int {
-        return finishedTrails.map{ Pair(it.trailsteps.first(), it.trailsteps.last())}.toSet().size
+        return finishedTrails.distinct().size
     }
 
     fun distinctTrails() : Int {
         return finishedTrails.size
     }
 
-    private fun findPath(trailheads: Set<Coords2D>) {
-        trailheads.map { Trail(listOf(it)) }
+    private fun findPath(trailheads: List<Coords2D>) {
+        trailheads.map { Trail(it, it) }
             .forEach { t -> nextPath(t) }
     }
 
     private fun nextPath(trail : Trail) {
         val currentCoord = trail.currentCoord()
-        val newTrails = SQUARED_DIRECTIONS.map {
-                d -> d.next(currentCoord)
-        }.filter {
-                c -> c.inMatrix(maxCoord) &&  trail.isClimbing(value(c))
-        }.map { trail.newTrail(it) }
+        val newTrails = SQUARED_DIRECTIONS.map { d -> d.next(currentCoord) }
+            .filter {c -> c.inMatrix(maxCoord) &&  trail.isClimbing(value(c))}
+            .map { trail.newTrail(it) }
         finishedTrails.addAll(newTrails.filter { it.over() })
         newTrails.filter { !it.over() }.forEach { nextPath(it) }
     }
 
 }
 
-class Trail(val trailsteps : List<Coords2D>) {
-    private val  currentCoord = trailsteps.last()
+data class Trail(val trailhead : Coords2D, val currentCoord : Coords2D) {
     fun over(): Boolean {
         return current() == 9
     }
@@ -67,7 +64,7 @@ class Trail(val trailsteps : List<Coords2D>) {
     }
 
     fun newTrail(next: Coords2D) : Trail {
-        return Trail(trailsteps+next)
+        return Trail(trailhead, next)
     }
 
     private fun current() : Int {
