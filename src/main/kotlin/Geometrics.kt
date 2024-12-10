@@ -84,4 +84,7 @@ enum class Directions {
     open fun turnRight() : Directions {
         return this
     }
+
 }
+
+val SQUARED_DIRECTIONS = setOf(Directions.TOP, Directions.RIGHT, Directions.DOWN, Directions.LEFT)
