@@ -87,4 +87,6 @@ enum class Directions {
 
 }
 
-val SQUARED_DIRECTIONS = setOf(Directions.TOP, Directions.RIGHT, Directions.DOWN, Directions.LEFT)
+val SQUARED_DIRECTIONS = listOf(Directions.TOP, Directions.RIGHT, Directions.DOWN, Directions.LEFT)
+val HORIZONTAL_DIRECTIONS = listOf(Directions.LEFT, Directions.RIGHT)
+val VERTICAL_DIRECTIONS = listOf(Directions.TOP, Directions.DOWN)
