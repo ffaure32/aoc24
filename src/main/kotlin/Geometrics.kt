@@ -26,6 +26,9 @@ enum class Directions {
         override fun turnRight(): Directions {
             return RIGHT
         }
+        override fun turnLeft(): Directions {
+            return LEFT
+        }
     },
     TOP_RIGHT {
         override fun next(actual: Coords2D): Coords2D {
@@ -41,6 +44,9 @@ enum class Directions {
         }
         override fun turnRight(): Directions {
             return DOWN
+        }
+        override fun turnLeft(): Directions {
+            return TOP
         }
     },
     DOWN_RIGHT {
@@ -58,6 +64,9 @@ enum class Directions {
         override fun turnRight(): Directions {
             return LEFT
         }
+        override fun turnLeft(): Directions {
+            return RIGHT
+        }
     },
     DOWN_LEFT {
         override fun next(actual: Coords2D): Coords2D {
@@ -74,6 +83,9 @@ enum class Directions {
         override fun turnRight(): Directions {
             return TOP
         }
+        override fun turnLeft(): Directions {
+            return DOWN
+        }
     };
     abstract fun next(actual : Coords2D) : Coords2D
 
@@ -82,6 +94,10 @@ enum class Directions {
     }
 
     open fun turnRight() : Directions {
+        return this
+    }
+
+    open fun turnLeft() : Directions {
         return this
     }
 
