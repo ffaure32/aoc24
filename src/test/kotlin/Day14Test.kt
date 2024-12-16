@@ -7,7 +7,7 @@ class Day14Test {
     @Test
     fun parseRegex() {
         val vector = """(-?\d+)""".toRegex()
-        val blocks = vector.findAll("p=10,3 v=-1,2").map(MatchResult::value)
+        vector.findAll("p=10,3 v=-1,2").map(MatchResult::value)
             .forEach { content -> println(content.toInt())}
     }
     @Test
