@@ -1,9 +1,16 @@
-data class Coords2D(val x: Int, val y: Int) {
+import kotlin.math.abs
+
+data class Coords2D(val x: Int, val y: Int) : Node {
     fun valid(maxX : Int, maxY : Int, minX :Int = 0, minY : Int = 0) : Boolean {
         return x >= minX && x <= maxX && y>= minY && y <= maxY
     }
     fun inMatrix(max : Int) : Boolean {
         return valid(max, max)
+    }
+
+    fun distance(other : Coords2D) : Int {
+        val diff = this - other
+        return abs(diff.x)+abs(diff.y)
     }
 }
 operator fun Coords2D.plus(other: Coords2D) = Coords2D(x + other.x, y + other.y)
