@@ -1,5 +1,3 @@
-import java.util.*
-
 class Day16 {
     val input = readInput(16)
     val maze = parseInput()
@@ -42,16 +40,27 @@ class Day16 {
 }
 
 class Maze(start: Coords2D, val end: Coords2D, val path: MutableSet<Coords2D>) {
-    val startNode = Node(start, Directions.RIGHT)
+    val startNode = TileNode(start, Directions.RIGHT)
     val shortestDistances = dijkstraWithLoops(buildWeightedNodes(), startNode)
     val weightedNodes = buildWeightedNodes()
+    val invertedNodes = invertNodes()
+
+    private fun invertNodes(): Map<Node, List<Node>> {
+        val result = mutableMapOf<Node, MutableList<Node>>()
+        weightedNodes.forEach { (k, v) -> v.forEach {
+                val current = result.getOrPut(it.first, {mutableListOf()})
+                current.add(k)
+            }
+        }
+        return result
+    }
 
     fun solve(): Int {
-        return SQUARED_DIRECTIONS.map { Node(end, it) }.minOf { getDistance(it) }
+        return SQUARED_DIRECTIONS.map { TileNode(end, it) }.minOf { getDistance(it) }
     }
 
     fun shortestPath() : Int {
-        val lastNode = SQUARED_DIRECTIONS.map { Node(end, it) }.minBy { getDistance(it) }
+        val lastNode = SQUARED_DIRECTIONS.map { TileNode(end, it) }.minBy { getDistance(it) }
         val target = getDistance(lastNode)
         val validPath = setOf(Pair(lastNode, target))
 
@@ -63,11 +72,12 @@ class Maze(start: Coords2D, val end: Coords2D, val path: MutableSet<Coords2D>) {
     private fun nextSteps(currentValues: Set<Pair<Node, Int>>, validCoords: MutableSet<Coords2D>): Int {
         currentValues.forEach {
             cv ->
-                val validOrigins = weightedNodes.filter {
-                    l -> l.value.any{ it.first == cv.first && cv.second == getDistance(l.key) + it.second }
+                val origins = invertedNodes[cv.first]!!
+                val validOrigins = origins.filter {
+                    l -> weightedNodes[l]!!.any{ it.first == cv.first && cv.second == getDistance(l) + it.second }
                 }
-                val nextValues = validOrigins.keys.map { k -> Pair(k, getDistance(k)) }.toSet()
-                validCoords.addAll(nextValues.map { it.first.coords })
+                val nextValues = validOrigins.map { k -> Pair(k, getDistance(k)) }.toSet()
+                validCoords.addAll(nextValues.map { (it.first as TileNode).coords })
                 if(nextValues.isNotEmpty()) {
                     nextSteps(nextValues, validCoords)
                 }
@@ -80,52 +90,29 @@ class Maze(start: Coords2D, val end: Coords2D, val path: MutableSet<Coords2D>) {
     }
 
     private fun buildWeightedNodes(): Map<Node, List<Pair<Node, Int>>> {
-        val weightedNodes = mutableMapOf<Node, List<Pair<Node, Int>>>()
+        val nodes = mutableMapOf<Node, List<Pair<Node, Int>>>()
         path.forEach { p ->
-            val associatedNodes = SQUARED_DIRECTIONS.map { d -> Node(p, d) }
-            val anMap = associatedNodes.associateWith { an ->
-                val pairs = an.turns().map { Pair(it, 1000) }.toMutableList()
+            val associatedTileNodes = SQUARED_DIRECTIONS.map { d -> TileNode(p, d) }
+            val anMap = associatedTileNodes.map { an ->
+                val pairs = an.turns().map { Pair(it as Node, 1000) }.toMutableList()
                 val next = an.neighbour()
                 if (path.contains(next.coords)) {
                     pairs.add(Pair(next, 1))
                 }
-                pairs
-            }
-            weightedNodes.putAll(anMap)
+                an as Node to pairs.toList()
+            } .toMap()
+            nodes.putAll(anMap)
         }
-        return weightedNodes.toMap()
+        return nodes.toMap()
     }
 }
 
 
-fun dijkstraWithLoops(graph: Map<Node, List<Pair<Node, Int>>>, start: Node): Map<Node, Int> {
-    val distances = mutableMapOf<Node, Int>().withDefault { Int.MAX_VALUE }
-    val priorityQueue = PriorityQueue<Pair<Node, Int>>(compareBy { it.second })
-    val visited = mutableSetOf<Pair<Node, Int>>()
-
-    priorityQueue.add(start to 0)
-    distances[start] = 0
-
-    while (priorityQueue.isNotEmpty()) {
-        val (node, currentDist) = priorityQueue.poll()
-        if (visited.add(node to currentDist)) {
-            graph[node]?.forEach { (adjacent, weight) ->
-                val totalDist = currentDist + weight
-                if (totalDist < distances.getValue(adjacent)) {
-                    distances[adjacent] = totalDist
-                    priorityQueue.add(adjacent to totalDist)
-                }
-            }
-        }
+data class TileNode(val coords : Coords2D, val direction : Directions) : Node {
+    fun neighbour(): TileNode {
+        return TileNode(direction.next(coords), direction)
     }
-    return distances
-}
-
-data class Node(val coords : Coords2D, val direction : Directions) {
-    fun neighbour(): Node {
-        return Node(direction.next(coords), direction)
-    }
-    fun turns(): List<Node> {
-        return listOf(Node(coords, direction.turnRight()), Node(coords, direction.turnLeft()))
+    fun turns(): List<TileNode> {
+        return listOf(TileNode(coords, direction.turnRight()), TileNode(coords, direction.turnLeft()))
     }
 }
