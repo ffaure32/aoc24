@@ -1,0 +1,5 @@
+liste de ceux qui ne peuvent être construits à partir d'autres
+-> nombre de combinaisons avec cette liste
+
+
+rrggbrggwgwwrrwwuwbruurubbbgbbrwuwrrggubbuggugrubr
