@@ -23,7 +23,7 @@ class Day15 {
                     'v' -> Directions.DOWN
                     '<' -> Directions.LEFT
                     '>' -> Directions.RIGHT
-                    '^' -> Directions.TOP
+                    '^' -> Directions.UP
                     else -> throw IllegalArgumentException()
                 }
             }
@@ -57,7 +57,7 @@ class Day15 {
                     'v' -> Directions.DOWN
                     '<' -> Directions.LEFT
                     '>' -> Directions.RIGHT
-                    '^' -> Directions.TOP
+                    '^' -> Directions.UP
                     else -> throw IllegalArgumentException()
                 }
             }

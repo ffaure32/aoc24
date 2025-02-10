@@ -115,4 +115,12 @@ data class TileNode(val coords : Coords2D, val direction : Directions) : Node {
     fun turns(): List<TileNode> {
         return listOf(TileNode(coords, direction.turnRight()), TileNode(coords, direction.turnLeft()))
     }
+
+    fun leftNeighbour() : TileNode {
+        return TileNode(coords, direction.turnLeft()).neighbour()
+    }
+
+    fun rightNeighbour() : TileNode {
+        return TileNode(coords, direction.turnRight()).neighbour()
+    }
 }

@@ -12,7 +12,18 @@ data class Coords2D(val x: Int, val y: Int) : Node {
         val diff = this - other
         return abs(diff.x)+abs(diff.y)
     }
+
+    fun coords3D(level: Int) : Coords3D {
+        return Coords3D(x, y, level)
+    }
 }
+
+data class Coords3D(val x: Int, val y: Int, val z: Int) : Node {
+    fun coords2D() : Coords2D {
+        return Coords2D(x, y)
+    }
+}
+
 operator fun Coords2D.plus(other: Coords2D) = Coords2D(x + other.x, y + other.y)
 operator fun Coords2D.minus(other: Coords2D) = Coords2D(x - other.x, y - other.y)
 operator fun Coords2D.times(other: Coords2D) = Coords2D(x * other.x, y * other.y)
@@ -23,7 +34,7 @@ enum class Directions {
             return Coords2D(actual.x-1, actual.y-1)
         }
     },
-    TOP {
+    UP {
         override fun next(actual: Coords2D): Coords2D {
             return Coords2D(actual.x, actual.y-1)
         }
@@ -53,7 +64,7 @@ enum class Directions {
             return DOWN
         }
         override fun turnLeft(): Directions {
-            return TOP
+            return UP
         }
     },
     DOWN_RIGHT {
@@ -88,7 +99,7 @@ enum class Directions {
             return Coords2D(actual.x-1, actual.y)
         }
         override fun turnRight(): Directions {
-            return TOP
+            return UP
         }
         override fun turnLeft(): Directions {
             return DOWN
@@ -110,6 +121,6 @@ enum class Directions {
 
 }
 
-val SQUARED_DIRECTIONS = listOf(Directions.TOP, Directions.RIGHT, Directions.DOWN, Directions.LEFT)
+val SQUARED_DIRECTIONS = listOf(Directions.UP, Directions.RIGHT, Directions.DOWN, Directions.LEFT)
 val HORIZONTAL_DIRECTIONS = listOf(Directions.LEFT, Directions.RIGHT)
-val VERTICAL_DIRECTIONS = listOf(Directions.TOP, Directions.DOWN)
+val VERTICAL_DIRECTIONS = listOf(Directions.UP, Directions.DOWN)

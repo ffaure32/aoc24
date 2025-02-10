@@ -42,7 +42,7 @@ class Day06 {
 
 class ManufacturingLab(var guardPosition : Coords2D, val walls : Set<Coords2D>, val gridSize : Int) {
     private val visitedPositions = mutableSetOf(guardPosition)
-    private var direction = Directions.TOP
+    private var direction = Directions.UP
     private val visitedOrientedPositions = mutableSetOf(Pair(guardPosition, direction))
     private var loop = false
 
