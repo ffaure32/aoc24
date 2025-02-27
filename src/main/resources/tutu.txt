@@ -1,0 +1,9 @@
+start
+hull breach -> (NSW)
+north (holodeck -> tambourine) (NES)
+east (sick bay -> astrolabe) (ESW)
+east (corridor) (NW)
+north (navigation -> klein bottle) NS
+north (hallway -> easter egg) S
+north (Observatory)
+east (Engineering)

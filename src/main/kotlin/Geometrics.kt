@@ -22,11 +22,18 @@ data class Coords3D(val x: Int, val y: Int, val z: Int) : Node {
     fun coords2D() : Coords2D {
         return Coords2D(x, y)
     }
+
+    fun distance(other : Coords3D) : Int {
+        val diff = this - other
+        return abs(diff.x)+abs(diff.y)+abs(diff.z)
+    }
+
 }
 
 operator fun Coords2D.plus(other: Coords2D) = Coords2D(x + other.x, y + other.y)
 operator fun Coords2D.minus(other: Coords2D) = Coords2D(x - other.x, y - other.y)
 operator fun Coords2D.times(other: Coords2D) = Coords2D(x * other.x, y * other.y)
+operator fun Coords3D.minus(other: Coords3D) = Coords3D(x - other.x, y - other.y, z - other.z)
 
 enum class Directions {
     TOP_LEFT {
